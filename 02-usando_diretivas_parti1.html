@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AngularJS</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+
+    <style>
+        .jumbotron{
+            width: 400px;
+            text-align: center;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .table{
+            margin-top: 20px;
+        }
+    </style>
+
+<!--
+ng-app / definindo as fronteiras da aplicação
+ng-controller / vinculando um elemento da view ao controller
+ng-bind / substituindo o elemento por uma expressão, ng-bind="lista" mesma coisa que {{lista}}
+ng-repeat / permite a iteração sobre os itens de uma coleção ou objeto
+ex: basicamente a logica do foreach "variavelRecebendo in variavelMandandoValor"
+
+ng-model / vinculando uma propriedade ao $scope, por ex: tipo atribulos
+aplica ele nos input, selects, tr, esses são os mais comuns
+
+ng-click / atribuindo um comportamento ao evento 
+
+
+-->
+
+<script src="node_modules/angular/angular.min.js"></script>
+<script>
+    angular.module('app', [])
+    angular.module('app').controller('Controller', function($scope){
+        $scope.lista = "Lista Telefonica"
+        $scope.contatos = [
+            {nome: "Pedro", telefone: "9999-0000"},
+            {nome: "Ana", telefone: "9999-0000"},
+            {nome: "Maria", telefone: "9999-0000"}
+
+        
+
+        ];
+        $scope.adicionarContato = function(contato){
+            $scope.contatos.push(angular.copy(contato)); //angular.copy / quebrando o ciclo de contato
+            delete $scope.contato;
+
+        };
+    });
+</script>
+
+
+</head>
+<body ng-controller="Controller">
+    <div  class="jumbotron">
+        <h3>{{lista}}</h3>
+        
+
+        <table class="table table-striped">
+            <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+            </tr>
+            <tr ng-repeat="contato in contatos"> 
+                <td>{{contato.nome}}</td>
+                <td>{{contato.telefone}}</td>
+
+                
+             <!--
+                podenendo fazer a mesma coisa a cima com mais interação
+
+                <tr ng-repeat="contato in contatos"> 
+                <td ng-repeat="(key, value) in contato">
+                    {{ value }}
+                    <td>
+                 </tr>                
+             -->   
+            </tr>
+        </table>
+        <hr>
+            <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
+            <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
+            <br>
+            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato);">Adicionar</button>
+
+            {{contato}}
+    </div>
+</body>
+</html>

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/WelitonAmartins/AngularJS-CursoRodrigoBranas#readme",
   "dependencies": {
-    "angular": "^1.7.5"
+    "angular": "^1.7.5",
+    "bootstrap": "^4.1.3"
   }
 }
