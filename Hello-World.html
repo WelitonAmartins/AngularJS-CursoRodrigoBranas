@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello World</title>
+<script src="node_modules/angular/angular.min.js"></script>
+<script>
+    angular.module('app', [])
+    angular.module('app').controller('Controller', function($scope){
+        $scope.message ="Hello World"
+    });
+</script>
+
+</head>
+<body>
+    <div ng-controller="Controller">
+        {{message}}
+
+
+    </div>
+</body>
+</html>
