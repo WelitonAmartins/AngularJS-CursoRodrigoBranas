@@ -19,20 +19,35 @@
         .table{
             margin-top: 20px;
         }
+        .selecionado{
+            background: #00FFFF;
+        }
     </style>
 
 <!--
-ng-app / definindo as fronteiras da aplicação
-ng-controller / vinculando um elemento da view ao controller
-ng-bind / substituindo o elemento por uma expressão, ng-bind="lista" mesma coisa que {{lista}}
-ng-repeat / permite a iteração sobre os itens de uma coleção ou objeto
-ex: basicamente a logica do foreach "variavelRecebendo in variavelMandandoValor"
+    Diretivas são extensões da linguagem HTML que permitem a implementação
+     de novos comportamentos, de forma declarativa
 
-ng-model / vinculando uma propriedade ao $scope, por ex: tipo atribulos
-aplica ele nos input, selects, tr, esses são os mais comuns
+part 2---------------------------------------------------------------------------
+ng-disabled / desabilitando um elemento dinamicamente, ex: botao
 
-ng-click / atribuindo um comportamento ao evento 
+ng-options / renderiza as opções de um select, um checkbox com options, ex: pratico
+primeira forma de implementação 
+<select ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+A ng-options diretiva usa uma matriz para preencher a lista suspensa. Em muitos casos, seria mais fácil usar a ng-repeat diretiva,
+     mas você tem mais flexibilidade ao usar a ng-options diretiva.
+ 
+ng-class e ng-style / aplicando classes css e estilos dinamicamente
+exemplo de style 
+<td><div style=" width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div></td>
 
+ng-show, ng-hide e ng-if / serve para exbir um elemento condicionalmente
+ex: antes com ng-disabled="!contato.nome"
+agora nao precisa fazer a condição com ! 
+fica mais simples ng-show="contato.nome"
+porem ng-if interage direto com a dom
+
+ng-include / inclui conteudo dinamicamente
 
 -->
 
@@ -45,15 +60,31 @@ ng-click / atribuindo um comportamento ao evento
             {nome: "Pedro", telefone: "9999-0000"},
             {nome: "Ana", telefone: "9999-0000"},
             {nome: "Maria", telefone: "9999-0000"}
-
-        
+        ];
+        $scope.operadoras = [
+            {nome: "OI", codigo:"14", categoria: "Celular"},
+            {nome: "Vivo", codigo:"15", categoria: "Celular"},
+            {nome: "TIM", codigo:"13", categoria: "Celular"},
+            {nome: "GVT", codigo:"25", categoria: "Fixo"},
+            {nome: "EMBRATEL", codigo:"21", categoria: "Fixo"}
 
         ];
+
         $scope.adicionarContato = function(contato){
             $scope.contatos.push(angular.copy(contato)); //angular.copy / quebrando o ciclo de contato
             delete $scope.contato;
-
         };
+        $scope.apagar = function(contatos){
+           $scope.contatos = contatos.filter(function (contato){// filter filtrando nessa funcao os contatos selecionados
+                if(!contato.selecionado) return contato;
+            }); 
+        };
+        $scope.isContatosSelecionados = function (contatos){
+            return contatos.some(function (contato){ // some vai olhar contato a contato e o return true vai ser se contato.selecionado
+                 return contato.selecionado;
+             });
+         }; 
+        
     });
 </script>
 
@@ -64,16 +95,18 @@ ng-click / atribuindo um comportamento ao evento
         <h3>{{lista}}</h3>
         
 
-        <table class="table table-striped">
+        <table ng-show="contatos.length > 0" class="table ">
             <tr>
+                <th></th>
                 <th>Nome</th>
                 <th>Telefone</th>
+                <th>Operadora</th>
             </tr>
-            <tr ng-repeat="contato in contatos"> 
+            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos"> 
+                <td><input type="checkbox" ng-model="contato.selecionado"/></td>
                 <td>{{contato.nome}}</td>
                 <td>{{contato.telefone}}</td>
-
-                
+                <td>{{contato.operadora.nome}}</td>
              <!--
                 podenendo fazer a mesma coisa a cima com mais interação
 
@@ -86,12 +119,21 @@ ng-click / atribuindo um comportamento ao evento
             </tr>
         </table>
         <hr>
+
+        
             <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
             <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
-            <br>
-            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato);">Adicionar</button>
-
-            {{contato}}
+    <!--se meu backend tivesse esperando o codigo apenas da operadora  ng-options="operadora.codigo as operadora.nome for operadora in operadoras">-->
+            <select class="form-control" ng-model="contato.operadora" ng-options=" operadora.nome group by operadora.categoria for operadora in operadoras">
+                <option value="">Selecione um operadora</option>
+            </select>
+            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato);" ng-disabled="!contato.nome || !contato.telefone">Adicionar</button>
+            <button class="btn btn-danger btn-block" ng-click="apagar(contatos);" ng-if="isContatosSelecionados(contatos)">Apagar</button>
+       
     </div>
+
+    <div ng-include="'footer.html'"></div>
+    
+
 </body>
 </html>

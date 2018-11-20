@@ -45,10 +45,8 @@ ng-click / atribuindo um comportamento ao evento
             {nome: "Pedro", telefone: "9999-0000"},
             {nome: "Ana", telefone: "9999-0000"},
             {nome: "Maria", telefone: "9999-0000"}
-
-        
-
         ];
+       
         $scope.adicionarContato = function(contato){
             $scope.contatos.push(angular.copy(contato)); //angular.copy / quebrando o ciclo de contato
             delete $scope.contato;
