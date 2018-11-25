@@ -9,22 +9,10 @@
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
-<!--
-    filtros
-    transformam o resultado de um expressão, realizando operações como 
-    formatação de data, a conversão de moeda e a ordenação de array
 
-    uppercase / transforma uma String em letra maiúscula
-    lowecase / transforma uma String em letra minuscula
-    date / formata uma data usando a máscara 
-    filter / filtra um array com base em um criterio, criando campo de busca 
-    orderBy / ordena um Array com base em um criterio 
-
--->
+<script src="../node_modules/angular/angular.min.js"></script>
 <script src="scripts/app.js"></script>
 <script src="scripts/controllers/meuController.js"></script>
-<script src="../node_modules/angular/angular.min.js"></script>
-
 
 </head>
 <body ng-controller="Controller">
@@ -46,15 +34,6 @@
                 <td>{{contato.telefone}}</td>
                 <td>{{contato.operadora.nome | lowercase}}</td>
                 <td>{{contato.instante | date:'dd//MM/yyyy HH:mm'}}</td>
-             <!--
-                podenendo fazer a mesma coisa a cima com mais interação
-
-                <tr ng-repeat="contato in contatos"> 
-                <td ng-repeat="(key, value) in contato">
-                    {{ value }}
-                    <td>
-                 </tr>                
-             -->   
             </tr>
         </table>
         <hr>
@@ -67,16 +46,6 @@
                 <option value="">Selecione um operadora</option>
             </select>
         </form>
-
-      <!-- dar um olhada melhor nesse fortado
-          <div ng-messages="contatoForm.nome.$error" class="alert alert-danger">
-			<div ng-message="required">
-				Por favor, preencha o campo nome!
-			</div>
-			<div ng-message="minlength">
-				O campo nome deve ter no mínimo 10 caracteres.
-			</div>
-		</div> -->
 
 
         <div ng-show="contatoForm.nome.$error.required && contatoForm.nome.$dirty" class="alert alert-danger"><!--$dirty responsavel por ao clicar no campo deixa de ser virgem -->
