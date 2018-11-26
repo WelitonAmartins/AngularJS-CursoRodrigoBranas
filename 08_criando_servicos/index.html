@@ -8,11 +8,23 @@
     <title>AngularJS</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
+<!--
+porque devemos criar serviços?
+reuso, organizacao, testes
+ um serviço é um singleton, ou seja, um objeto unico, criada na inicialiação da aplicação
+ e que está disponivel para ser injetado em outros componentes
 
+ factory
+
+-->
 
 <script src="../node_modules/angular/angular.min.js"></script>
 <script src="scripts/app.js"></script>
 <script src="scripts/controllers/meuController.js"></script>
+<script src="scripts/services/contatosAPIService.js"></script>
+<script src="scripts/services/operadoraAPIService.js"></script>
+<script src="scripts/value/configValue.js"></script>
+
 
 </head>
 <body ng-controller="Controller">
@@ -23,6 +35,7 @@
         <table ng-show="contatos.length > 0" class="table ">
             <tr>
                 <th></th>
+                
                 <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
                 <th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
                 <th>Operadora</th>
@@ -30,6 +43,7 @@
             </tr>
             <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao"><!--  orderBy:'nome' ou {nome: criterioDeBusca"} quiser pesquisar por nome especifico --> 
                 <td><input type="checkbox" ng-model="contato.selecionado"/></td>
+               
                 <td>{{contato.nome | uppercase}}</td>
                 <td>{{contato.telefone}}</td>
                 <td>{{contato.operadora.nome | lowercase}}</td>

@@ -1,14 +1,10 @@
-angular.module('app').controller('Controller', function($scope, $http){
+angular.module('app').controller('Controller', function($scope, $http, contatosAPI, operadorasAPI){
     $scope.lista = "Lista Telefonica"
     $scope.contatos = [];
     $scope.operadoras = [];
     var carregarContatos = function(){
         
-        var urlapi = "http://localhost:8081/contatos"
-        $http({
-            url: urlapi,
-            method: 'GET'
-        }).then(function(resposta){
+        contatosAPI.getContatos().then(function(resposta){
             $scope.contatos = resposta.data;
         
         }).catch(function(data, status){
@@ -19,11 +15,7 @@ angular.module('app').controller('Controller', function($scope, $http){
         
     }
     var carregarOperadoras = function(){
-        var urlapi ='http://localhost:8081/operadoras'
-          $http({
-                url: urlapi,
-                method: 'GET'
-            }).then(function(resposta){
+        operadorasAPI.getOperadoras().then(function(resposta){
                 $scope.operadoras = resposta.data;
             }, function(resposta){
                 alert('Algum erro aconteceu');
@@ -34,8 +26,9 @@ angular.module('app').controller('Controller', function($scope, $http){
     }
 
     $scope.adicionarContato = function(contato){
+    
        contato.instante = new Date();
-       $http.post("http://localhost:8081/contatos", contato).then(function(data){
+       contatosAPI.saveContato(contato).then(function(data){
         delete $scope.contato;
         $scope.contatoForm.$setPristine(); // fazendo o campo voltar a ser pristine a ser virgem
         carregarContatos();
