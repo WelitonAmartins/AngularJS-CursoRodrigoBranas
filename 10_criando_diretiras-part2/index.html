@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="app">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AngularJS</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui.css">
+
+<!--
+ criando diretiva 
+
+ template e
+ templateUrl 
+    especifica o template ou url do template que devera ser incluido dentro
+    do elemento que estiver utilizando a diretiva
+
+ replace
+
+ restrict 
+        restringe o modo de utilizacao da diretiva ao atributo,
+         elemento, classe e comentário, ou ainda uma combinação deles
+        caso nao seja definido o padrão é qie a diretiva seja atribuida pelo atributo
+        tipos de restrição 
+        A - Diretiva ao atributo do elemento
+        E - Diretiva restrita ao elemento
+        C - diretiva restrita a classe do elemento
+        M - Diretiva restrica ao comentário do elemento
+ scope
+    Por padrão, uma diretiva compartilhada o mesmo scope de onde é utilizada.
+    para aumentar seu potencial de reuso, podemos isolar seu scope, passando os dados necessários
+    por parametros
+    @ vincula o valor do atributo diretamente a uma propriedade do scope da diretiva
+    = cria um vinculo bi-direcional entre uma propriedade do scope do template a uma
+     propriedade do scope da diretiva
+
+ transclude
+    encapsula elementos dentro de uma diretiva, criando um scope não isolado
+
+-->
+
+<script src="../node_modules/angular/angular.min.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/meuController.js"></script>
+<script src="scripts/services/contatosAPIService.js"></script>
+<script src="scripts/services/operadoraAPIService.js"></script>
+<script src="scripts/value/configValue.js"></script>
+<script src="scripts/filters/nameFilter.js"></script>
+<script src="scripts/filters/ellipisFilter.js"></script>
+<script src="scripts/directive/uiAlertDirective.js"></script>
+
+
+</head>
+<body ng-controller="Controller">
+    <div  class="jumbotron">
+        <h3>{{lista}}</h3>
+
+        <div ui-alert title="Ops, aconteceu um, problema! " message="message" ></div>
+
+        <input class="form-control" type="text" ng-model="criterioDeBusca" placeholder="O que você está buscando?">
+        <table ng-show="contatos.length > 0" class="table ">
+            <tr>
+                <th></th>
+                
+                <th><a href="" ng-click="ordenarPor('nome')">Nome</a></th>
+                <th><a href="" ng-click="ordenarPor('telefone')">Telefone</a></th>
+                <th>Operadora</th>
+                <th>Data</th>
+            </tr>
+            <tr ng-class="{selecionado: contato.selecionado}" ng-repeat="contato in contatos | filter:criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao"><!--  orderBy:'nome' ou {nome: criterioDeBusca"} quiser pesquisar por nome especifico --> 
+                <td><input type="checkbox" ng-model="contato.selecionado"/></td>
+               
+                <td>{{contato.nome | name | ellipsis:10}}</td>
+                <td>{{contato.telefone}}</td>
+                <td>{{contato.operadora.nome }}</td>
+                <td>{{contato.instante | date:'dd//MM/yyyy HH:mm'}}</td>
+            </tr>
+        </table>
+        <hr>
+
+        <form name="contatoForm">
+            <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true" ng-minlength="5">
+            <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-pattern="/^\d{4,5}-\d{4}$/">
+    <!--se meu backend tivesse esperando o codigo apenas da operadora  ng-options="operadora.codigo as operadora.nome for operadora in operadoras">-->
+            <select class="form-control" ng-model="contato.operadora" ng-options=" operadora.nome group by operadora.categoria for operadora in operadoras | orderBy:'nome'">
+                <option value="">Selecione um operadora</option>
+            </select>
+        </form>
+
+
+        <div ng-show="contatoForm.nome.$error.required && contatoForm.nome.$dirty" class="alert alert-danger"><!--$dirty responsavel por ao clicar no campo deixa de ser virgem -->
+          Por favor preencha campo nome!
+        </div>
+        <div ng-show="contatoForm.nome.$error.minlength" class="alert alert-danger">
+           O campo nome deve ter no mínimo 5 caracteres.
+          </div> 
+        <div ng-show="contatoForm.telefone.$error.required && contatoForm.telefone.$dirty" class="alert alert-danger">
+            Por favor preencha campo telefone
+        </div>
+        <div ng-show="contatoForm.telefone.$error.pattern " class="alert alert-danger">
+            O campo deve ter o formado DDDDD-DDDD.
+        </div>
+
+            <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato);" ng-disabled="contatoForm.$invalid">Adicionar</button>
+            <button class="btn btn-danger btn-block" ng-click="apagar(contatos);" ng-if="isContatosSelecionados(contatos)">Apagar</button>
+       
+    </div>
+
+    <div ng-include="'view/footer.html'"></div>
+    
+
+</body>
+</html>
