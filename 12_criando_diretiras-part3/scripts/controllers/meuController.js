@@ -3,6 +3,7 @@ angular.module('app').controller('Controller', function($scope, $http, contatosA
     $scope.error = " Erro ao carregar contatos "
     $scope.contatos = [];
     $scope.operadoras = [];
+    $scope.contato = {};
     var carregarContatos = function(){
         
         contatosAPI.getContatos().then(function(resposta){
@@ -18,9 +19,7 @@ angular.module('app').controller('Controller', function($scope, $http, contatosA
     var carregarOperadoras = function(){
         operadorasAPI.getOperadoras().then(function(resposta){
                 $scope.operadoras = resposta.data;
-            }, function(resposta){
-               
-                alert('Algum erro aconteceu');
+            
             }).finally(function(){//finally sempre executa quando for finalizado 
                 $scope.carregarOperadoras = true;
         
